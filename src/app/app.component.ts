@@ -25,18 +25,9 @@ export class AppComponent {
   public state = {
     // Diagram state props
     diagramNodeData: [
-      { id: 'Alpha', text: "Alpha", color: 'lightblue' },
-      { id: 'Beta', text: "Beta", color: 'orange' },
-      { id: 'Gamma', text: "Gamma", color: 'lightgreen' },
-      { id: 'Delta', text: "Delta", color: 'pink' }
+      { id: 'Alpha', text: "Alpha", color: 'lightblue', imgSrc: 'assets/tiger.svg' },
     ],
-    diagramLinkData: [
-        { key: -1, from: 'Alpha', to: 'Beta', fromPort: 'r', toPort: '1' },
-        { key: -2, from: 'Alpha', to: 'Gamma', fromPort: 'b', toPort: 't' },
-        { key: -3, from: 'Beta', to: 'Beta' },
-        { key: -4, from: 'Gamma', to: 'Delta', fromPort: 'r', toPort: 'l' },
-        { key: -5, from: 'Delta', to: 'Alpha', fromPort: 't', toPort: 'r' }
-    ],
+    diagramLinkData: [],
     diagramModelData: { prop: 'value' },
     skipsDiagramUpdate: false,
     selectedNodeData: null, // used by InspectorComponent
@@ -97,14 +88,14 @@ export class AppComponent {
             )
         },
         $(go.Panel, 'Auto',
-          $(go.Shape, 'RoundedRectangle', { stroke: null },
-            new go.Binding('fill', 'color', (c, panel) => {
-             
-              return c;
-            })
+          $(
+            go.Picture,
+            {
+              width: 200,
+              height: 200,
+            },
+            new go.Binding('source', 'imgSrc')
           ),
-          $(go.TextBlock, { margin: 8, editable: true },
-            new go.Binding('text').makeTwoWay())
         ),
         // Ports
         makePort('t', go.Spot.TopCenter),
@@ -112,6 +103,8 @@ export class AppComponent {
         makePort('r', go.Spot.Right),
         makePort('b', go.Spot.BottomCenter)
       );
+
+    dia.animationManager.isEnabled = false;
 
     return dia;
   }
